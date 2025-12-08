@@ -1,0 +1,54 @@
+---
+title: "[LEARNING] "
+labels: ["learning", "education"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## 📚 Learning & Education
+        
+        Share educational content, ask questions, or offer mentorship!
+  
+  - type: dropdown
+    id: learning-type
+    attributes:
+      label: Type
+      options:
+        - Question
+        - Tutorial/Guide
+        - Course Recommendation
+        - Study Group
+        - Mentorship Offer
+        - Mentorship Request
+        - Resource Share
+    validations:
+      required: true
+  
+  - type: textarea
+    id: content
+    attributes:
+      label: Content
+      description: Your question, tutorial, or educational content
+    validations:
+      required: true
+  
+  - type: dropdown
+    id: skill-level
+    attributes:
+      label: Skill Level
+      options:
+        - Beginner
+        - Intermediate
+        - Advanced
+        - All Levels
+  
+  - type: textarea
+    id: topics
+    attributes:
+      label: Topics/Areas
+      description: What topics does this cover?
+      placeholder: |
+        - Windows exploitation
+        - Network protocols
+        - Malware analysis
+        - etc.
