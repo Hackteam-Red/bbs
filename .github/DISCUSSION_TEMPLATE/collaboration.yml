@@ -1,0 +1,77 @@
+---
+title: "[COLLAB] "
+labels: ["collaboration", "project"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## 🎯 Collaboration Opportunity
+        
+        Looking for collaborators? Describe your project!
+  
+  - type: input
+    id: project-name
+    attributes:
+      label: Project Name
+      placeholder: "e.g., Advanced EDR Bypass Framework"
+    validations:
+      required: true
+  
+  - type: textarea
+    id: description
+    attributes:
+      label: Project Description
+      description: What are you building? What's the goal?
+    validations:
+      required: true
+  
+  - type: textarea
+    id: looking-for
+    attributes:
+      label: Looking For
+      description: What skills, roles, or contributions do you need?
+      placeholder: |
+        - C/C++ developers
+        - Reverse engineers
+        - Documentation writers
+        - Testers
+    validations:
+      required: true
+  
+  - type: dropdown
+    id: time-commitment
+    attributes:
+      label: Time Commitment
+      options:
+        - Few hours per week
+        - Part-time (10-20 hrs/week)
+        - Full-time
+        - One-time contribution
+        - Flexible
+  
+  - type: dropdown
+    id: compensation-type
+    attributes:
+      label: Compensation
+      options:
+        - Volunteer/Open Source
+        - Paid
+        - Revenue Share
+        - Equity
+        - To be discussed
+  
+  - type: input
+    id: repo
+    attributes:
+      label: Repository/Project Link (if exists)
+      placeholder: "https://github.com/..."
+  
+  - type: textarea
+    id: contact
+    attributes:
+      label: How to Get Involved
+      description: How should interested people reach out?
+    validations:
+      required: true
+
+---
