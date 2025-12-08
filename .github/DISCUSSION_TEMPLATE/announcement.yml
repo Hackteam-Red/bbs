@@ -1,0 +1,45 @@
+---
+title: "[ANNOUNCEMENT] "
+labels: ["announcement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## 📢 General Announcement
+        
+        Share news, updates, or important information with the community.
+  
+  - type: dropdown
+    id: announcement-type
+    attributes:
+      label: Type of Announcement
+      options:
+        - Event/Conference
+        - Release/Update
+        - Community News
+        - Security Advisory
+        - Other
+    validations:
+      required: true
+  
+  - type: textarea
+    id: content
+    attributes:
+      label: Announcement
+      description: Your message to the community
+    validations:
+      required: true
+  
+  - type: input
+    id: link
+    attributes:
+      label: Related Link (Optional)
+      placeholder: "https://..."
+  
+  - type: input
+    id: date
+    attributes:
+      label: Date/Deadline (if applicable)
+      placeholder: "e.g., 2024-12-31"
+
+---
