@@ -1,0 +1,101 @@
+---
+title: "[TOOL] "
+labels: ["tools", "resources"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## 🔧 Tool/Resource Sharing
+        
+        Share a useful tool, script, or resource with the community!
+  
+  - type: input
+    id: tool-name
+    attributes:
+      label: Tool/Resource Name
+      placeholder: "e.g., CustomPayloadGenerator"
+    validations:
+      required: true
+  
+  - type: dropdown
+    id: type
+    attributes:
+      label: Type
+      options:
+        - Script
+        - Tool/Software
+        - Library/Framework
+        - Wordlist/Dataset
+        - Documentation
+        - Tutorial/Guide
+        - Other
+    validations:
+      required: true
+  
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: What does it do? Why is it useful?
+    validations:
+      required: true
+  
+  - type: input
+    id: link
+    attributes:
+      label: Link/Repository
+      description: URL to the tool, repo, or resource
+      placeholder: "https://github.com/..."
+  
+  - type: dropdown
+    id: category
+    attributes:
+      label: Category
+      multiple: true
+      options:
+        - Reconnaissance
+        - Exploitation
+        - Post-Exploitation
+        - Privilege Escalation
+        - Defense Evasion
+        - Lateral Movement
+        - C2/Infrastructure
+        - OSINT
+        - Forensics
+        - Reverse Engineering
+        - Web Security
+        - Network Security
+        - Mobile Security
+        - Cloud Security
+  
+  - type: input
+    id: language
+    attributes:
+      label: Programming Language(s)
+      placeholder: "e.g., Python, C, PowerShell"
+  
+  - type: dropdown
+    id: platform
+    attributes:
+      label: Platform
+      multiple: true
+      options:
+        - Windows
+        - Linux
+        - macOS
+        - Cross-platform
+        - Web-based
+  
+  - type: textarea
+    id: installation
+    attributes:
+      label: Installation/Usage (Optional)
+      description: Quick start instructions
+      placeholder: |
+        ```bash
+        git clone ...
+        pip install -r requirements.txt
+        python tool.py --help
+        ```
+
+---
