@@ -1,0 +1,63 @@
+---
+title: "[HELP] "
+labels: ["help-wanted"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## 🤝 Help Wanted
+        
+        Need assistance? Fill out the details below and the community will help!
+  
+  - type: dropdown
+    id: help-type
+    attributes:
+      label: Type of Help Needed
+      options:
+        - Technical Support
+        - Code Review
+        - Tool Development
+        - Research Assistance
+        - Mentorship
+        - Other
+    validations:
+      required: true
+  
+  - type: textarea
+    id: problem
+    attributes:
+      label: What do you need help with?
+      description: Describe your problem or request in detail
+    validations:
+      required: true
+  
+  - type: textarea
+    id: context
+    attributes:
+      label: Context & Background
+      description: Provide any relevant context, what you've tried, etc.
+      placeholder: |
+        - What have you already tried?
+        - Any error messages?
+        - Relevant environment details
+  
+  - type: dropdown
+    id: urgency
+    attributes:
+      label: Urgency
+      options:
+        - Low - No rush
+        - Medium - Within a week
+        - High - Within days
+        - Critical - ASAP
+    validations:
+      required: true
+  
+  - type: textarea
+    id: skills
+    attributes:
+      label: Skills/Expertise Needed
+      description: What skills or knowledge would be helpful?
+      placeholder: "e.g., Python, Windows internals, cryptography"
+
+---
