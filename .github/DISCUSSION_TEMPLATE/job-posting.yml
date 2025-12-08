@@ -1,0 +1,90 @@
+---
+title: "[JOB] "
+labels: ["job", "opportunity"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## 💼 Job/Opportunity Posting
+        
+        Thanks for posting a job opportunity! Please fill out the details below.
+  
+  - type: input
+    id: position
+    attributes:
+      label: Position Title
+      description: What is the job title or role?
+      placeholder: "e.g., Senior Penetration Tester"
+    validations:
+      required: true
+  
+  - type: dropdown
+    id: job-type
+    attributes:
+      label: Job Type
+      options:
+        - Full-time
+        - Part-time
+        - Contract
+        - Freelance
+        - Internship
+        - Volunteer
+    validations:
+      required: true
+  
+  - type: dropdown
+    id: location-type
+    attributes:
+      label: Location Type
+      options:
+        - Remote
+        - On-site
+        - Hybrid
+    validations:
+      required: true
+  
+  - type: input
+    id: location
+    attributes:
+      label: Location
+      description: City, Country or "Worldwide" for remote
+      placeholder: "e.g., London, UK or Worldwide"
+  
+  - type: textarea
+    id: description
+    attributes:
+      label: Job Description
+      description: Describe the role, responsibilities, and requirements
+      placeholder: |
+        - Key responsibilities
+        - Required skills
+        - Nice to have
+    validations:
+      required: true
+  
+  - type: input
+    id: compensation
+    attributes:
+      label: Compensation Range (Optional)
+      placeholder: "e.g., $80k-$120k or €50-70/hour"
+  
+  - type: input
+    id: contact
+    attributes:
+      label: How to Apply
+      description: Email, website, or contact method
+      placeholder: "e.g., careers@company.com"
+    validations:
+      required: true
+  
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Posting Guidelines
+      options:
+        - label: This is a legitimate opportunity
+          required: true
+        - label: I have authority to post this position
+          required: true
+
+---
