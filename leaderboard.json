@@ -1,0 +1,174 @@
+{
+  "generated_at": "2024-12-08T12:00:00Z",
+  "total_users": 25,
+  "top_users": [
+    {
+      "rank": 1,
+      "username": "alice",
+      "score": 520,
+      "tier": "💎 Diamond",
+      "tier_level": 5,
+      "badges": ["🎯 Problem Solver", "⭐ Helpful", "🔥 Hot Streak"],
+      "stats": {
+        "discussions": 35,
+        "comments": 89,
+        "answers": 12,
+        "reactions_received": 45,
+        "helpful_comments": 25,
+        "recent_activity": 8
+      }
+    },
+    {
+      "rank": 2,
+      "username": "bob",
+      "score": 380,
+      "tier": "🥇 Gold",
+      "tier_level": 4,
+      "badges": ["💬 Conversationalist", "📢 Active Poster"],
+      "stats": {
+        "discussions": 52,
+        "comments": 67,
+        "answers": 5,
+        "reactions_received": 30,
+        "helpful_comments": 15,
+        "recent_activity": 6
+      }
+    },
+    {
+      "rank": 3,
+      "username": "charlie",
+      "score": 285,
+      "tier": "🥇 Gold",
+      "tier_level": 4,
+      "badges": ["⭐ Helpful", "🔥 Hot Streak"],
+      "stats": {
+        "discussions": 28,
+        "comments": 95,
+        "answers": 8,
+        "reactions_received": 38,
+        "helpful_comments": 22,
+        "recent_activity": 7
+      }
+    },
+    {
+      "rank": 4,
+      "username": "diana",
+      "score": 145,
+      "tier": "🥈 Silver",
+      "tier_level": 3,
+      "badges": ["🎯 Problem Solver"],
+      "stats": {
+        "discussions": 15,
+        "comments": 42,
+        "answers": 10,
+        "reactions_received": 20,
+        "helpful_comments": 12,
+        "recent_activity": 3
+      }
+    },
+    {
+      "rank": 5,
+      "username": "eve",
+      "score": 98,
+      "tier": "🥉 Bronze",
+      "tier_level": 2,
+      "badges": ["💬 Conversationalist"],
+      "stats": {
+        "discussions": 8,
+        "comments": 105,
+        "answers": 2,
+        "reactions_received": 15,
+        "helpful_comments": 8,
+        "recent_activity": 5
+      }
+    },
+    {
+      "rank": 6,
+      "username": "frank",
+      "score": 75,
+      "tier": "🥉 Bronze",
+      "tier_level": 2,
+      "badges": [],
+      "stats": {
+        "discussions": 12,
+        "comments": 28,
+        "answers": 3,
+        "reactions_received": 10,
+        "helpful_comments": 5,
+        "recent_activity": 2
+      }
+    },
+    {
+      "rank": 7,
+      "username": "grace",
+      "score": 62,
+      "tier": "🥉 Bronze",
+      "tier_level": 2,
+      "badges": ["🔥 Hot Streak"],
+      "stats": {
+        "discussions": 10,
+        "comments": 22,
+        "answers": 4,
+        "reactions_received": 8,
+        "helpful_comments": 4,
+        "recent_activity": 6
+      }
+    },
+    {
+      "rank": 8,
+      "username": "henry",
+      "score": 48,
+      "tier": "🌱 Newcomer",
+      "tier_level": 1,
+      "badges": [],
+      "stats": {
+        "discussions": 5,
+        "comments": 18,
+        "answers": 1,
+        "reactions_received": 5,
+        "helpful_comments": 2,
+        "recent_activity": 4
+      }
+    },
+    {
+      "rank": 9,
+      "username": "iris",
+      "score": 35,
+      "tier": "🌱 Newcomer",
+      "tier_level": 1,
+      "badges": [],
+      "stats": {
+        "discussions": 3,
+        "comments": 12,
+        "answers": 0,
+        "reactions_received": 3,
+        "helpful_comments": 1,
+        "recent_activity": 2
+      }
+    },
+    {
+      "rank": 10,
+      "username": "jack",
+      "score": 28,
+      "tier": "🌱 Newcomer",
+      "tier_level": 1,
+      "badges": [],
+      "stats": {
+        "discussions": 2,
+        "comments": 10,
+        "answers": 0,
+        "reactions_received": 2,
+        "helpful_comments": 0,
+        "recent_activity": 1
+      }
+    }
+  ],
+  "tier_distribution": {
+    "🏆 Legend": 0,
+    "💎 Diamond": 1,
+    "🥇 Gold": 2,
+    "🥈 Silver": 1,
+    "🥉 Bronze": 3,
+    "🌱 Newcomer": 3
+  }
+}
