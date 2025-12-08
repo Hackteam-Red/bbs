@@ -1,0 +1,26 @@
+<?xml version="1.0" ?>
+<rss version="2.0">
+  <channel>
+    <title>Hackteam-Red BBS</title>
+    <link>https://github.com/Hackteam-Red/bbs/discussions</link>
+    <description>Red Team Community Bulletin Board</description>
+    <language>en</language>
+    <item>
+      <title>Welcome to bbs Discussions!</title>
+      <description>&lt;!--
+    ✏️ Optional: Customize the content below to let your community know what you intend to use Discussions for.
+--&gt;
+## 👋 Welcome!
+  We’re using Discussions as a place to connect with other members of our community. We hope that you:
+  * Ask questions you’re wondering about.
+  * Share ideas.
+  * Engage with other community members.
+  * Welcome others and are open-minded. Remember that this is a community we
+  build together 💪.
+
+  To get started, comment below with an introduction </description>
+      <author>toxy4ny</author>
+      <pubDate>2025-12-08T12:51:50Z</pubDate>
+    </item>
+  </channel>
+</rss>
