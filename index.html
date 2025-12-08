@@ -3,7 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hackteam-Red BBS - Dashboard</title>
+    <title>HACKTEAM-RED :: COMMAND CENTER</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -11,41 +14,164 @@
             box-sizing: border-box;
         }
 
+        :root {
+            --red-primary: #ff0040;
+            --red-glow: rgba(255, 0, 64, 0.5);
+            --green-matrix: #00ff41;
+            --cyan-hack: #00ffff;
+            --bg-dark: #0a0a0a;
+            --bg-darker: #050505;
+            --terminal-green: #33ff33;
+            --warning-orange: #ff6600;
+        }
+
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: #333;
+            font-family: 'Share Tech Mono', monospace;
+            background: var(--bg-dark);
+            color: var(--green-matrix);
             line-height: 1.6;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Matrix rain background */
+        #matrix-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            opacity: 0.05;
+            pointer-events: none;
+        }
+
+        /* Scanline effect */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(
+                0deg,
+                rgba(0, 0, 0, 0.15),
+                rgba(0, 0, 0, 0.15) 1px,
+                transparent 1px,
+                transparent 2px
+            );
+            pointer-events: none;
+            z-index: 9999;
         }
 
         .container {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
             padding: 20px;
+            position: relative;
+            z-index: 1;
         }
 
+        /* Terminal header */
         header {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            padding: 30px;
-            border-radius: 15px;
+            background: var(--bg-darker);
+            border: 2px solid var(--red-primary);
+            border-radius: 0;
+            padding: 20px;
             margin-bottom: 30px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 0 20px var(--red-glow), inset 0 0 20px rgba(255, 0, 64, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--red-primary), transparent);
+            animation: scan 3s infinite;
+        }
+
+        @keyframes scan {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        .terminal-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .terminal-dots {
+            display: flex;
+            gap: 8px;
+        }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--red-primary);
+            box-shadow: 0 0 10px var(--red-glow);
+            animation: pulse 2s infinite;
+        }
+
+        .dot:nth-child(2) {
+            background: var(--warning-orange);
+            animation-delay: 0.3s;
+        }
+
+        .dot:nth-child(3) {
+            background: var(--green-matrix);
+            animation-delay: 0.6s;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
         }
 
         h1 {
+            font-family: 'Orbitron', monospace;
             font-size: 2.5em;
-            margin-bottom: 10px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            font-weight: 900;
+            color: var(--red-primary);
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            text-shadow: 0 0 10px var(--red-glow), 0 0 20px var(--red-glow);
+            margin-bottom: 5px;
         }
 
         .subtitle {
-            color: #666;
-            font-size: 1.1em;
+            color: var(--cyan-hack);
+            font-size: 0.9em;
+            letter-spacing: 2px;
+            text-transform: uppercase;
         }
 
+        .status-bar {
+            display: flex;
+            gap: 20px;
+            margin-top: 15px;
+            font-size: 0.85em;
+        }
+
+        .status-item {
+            color: var(--terminal-green);
+        }
+
+        .status-item::before {
+            content: "▸ ";
+            color: var(--red-primary);
+        }
+
+        /* Stats grid */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -54,237 +180,496 @@
         }
 
         .stat-card {
-            background: white;
-            padding: 25px;
-            border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            background: var(--bg-darker);
+            border: 1px solid var(--red-primary);
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .stat-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--red-primary);
+            box-shadow: 0 0 10px var(--red-glow);
         }
 
         .stat-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+            border-color: var(--cyan-hack);
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .stat-card:hover::before {
+            background: var(--cyan-hack);
+            box-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
         }
 
         .stat-card h3 {
-            font-size: 0.9em;
-            color: #666;
+            font-size: 0.8em;
+            color: var(--cyan-hack);
             margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .stat-value {
+            font-family: 'Orbitron', monospace;
+            font-size: 2.5em;
+            font-weight: 700;
+            color: var(--red-primary);
+            text-shadow: 0 0 10px var(--red-glow);
+        }
+
+        .stat-label {
+            font-size: 0.75em;
+            color: var(--terminal-green);
+            margin-top: 5px;
+        }
+
+        /* Section */
+        .section {
+            background: var(--bg-darker);
+            border: 1px solid var(--red-primary);
+            padding: 25px;
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .section::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 30px;
+            height: 30px;
+            border-right: 2px solid var(--red-primary);
+            border-bottom: 2px solid var(--red-primary);
+        }
+
+        .section::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 30px;
+            height: 30px;
+            border-left: 2px solid var(--red-primary);
+            border-top: 2px solid var(--red-primary);
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--red-primary);
+        }
+
+        .section h2 {
+            font-family: 'Orbitron', monospace;
+            color: var(--red-primary);
+            font-size: 1.5em;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+        }
+
+        .section-icon {
+            color: var(--cyan-hack);
+            font-size: 1.5em;
+        }
+
+        /* Leaderboard table */
+        .leaderboard-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9em;
+        }
+
+        .leaderboard-table thead {
+            background: rgba(255, 0, 64, 0.1);
+        }
+
+        .leaderboard-table th {
+            color: var(--cyan-hack);
+            padding: 15px 10px;
+            text-align: left;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-bottom: 2px solid var(--red-primary);
+        }
+
+        .leaderboard-table td {
+            padding: 15px 10px;
+            border-bottom: 1px solid rgba(255, 0, 64, 0.2);
+            color: var(--terminal-green);
+        }
+
+        .leaderboard-table tr:hover {
+            background: rgba(0, 255, 65, 0.05);
+        }
+
+        .rank {
+            font-family: 'Orbitron', monospace;
+            font-size: 1.2em;
+            font-weight: 700;
+            color: var(--red-primary);
+            text-shadow: 0 0 5px var(--red-glow);
+        }
+
+        .rank-1 {
+            color: #ffd700;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+        }
+
+        .rank-2 {
+            color: #c0c0c0;
+            text-shadow: 0 0 10px rgba(192, 192, 192, 0.5);
+        }
+
+        .rank-3 {
+            color: #cd7f32;
+            text-shadow: 0 0 10px rgba(205, 127, 50, 0.5);
+        }
+
+        .username {
+            font-weight: 700;
+            color: var(--cyan-hack);
+        }
+
+        .tier {
+            display: inline-block;
+            padding: 4px 10px;
+            font-size: 0.85em;
+            font-weight: 700;
+            border: 1px solid;
             text-transform: uppercase;
             letter-spacing: 1px;
         }
 
-        .stat-value {
-            font-size: 2.5em;
-            font-weight: bold;
-            color: #667eea;
+        .tier-legend {
+            color: #ffd700;
+            border-color: #ffd700;
+            background: rgba(255, 215, 0, 0.1);
+            box-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
         }
 
-        .section {
-            background: white;
-            padding: 30px;
-            border-radius: 15px;
-            margin-bottom: 30px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        .tier-diamond {
+            color: var(--cyan-hack);
+            border-color: var(--cyan-hack);
+            background: rgba(0, 255, 255, 0.1);
+            box-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
         }
 
-        .section h2 {
-            margin-bottom: 20px;
-            color: #333;
-            font-size: 1.8em;
+        .tier-gold {
+            color: #ffaa00;
+            border-color: #ffaa00;
+            background: rgba(255, 170, 0, 0.1);
         }
 
-        .leaderboard-table {
-            width: 100%;
-            border-collapse: collapse;
-            overflow: hidden;
+        .tier-silver {
+            color: #c0c0c0;
+            border-color: #c0c0c0;
+            background: rgba(192, 192, 192, 0.1);
         }
 
-        .leaderboard-table th {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 15px;
-            text-align: left;
-            font-weight: 600;
+        .tier-bronze {
+            color: #cd7f32;
+            border-color: #cd7f32;
+            background: rgba(205, 127, 50, 0.1);
         }
 
-        .leaderboard-table td {
-            padding: 15px;
-            border-bottom: 1px solid #eee;
+        .tier-newcomer {
+            color: var(--terminal-green);
+            border-color: var(--terminal-green);
+            background: rgba(51, 255, 51, 0.1);
         }
 
-        .leaderboard-table tr:hover {
-            background: #f8f9ff;
+        .score {
+            font-family: 'Orbitron', monospace;
+            font-weight: 700;
+            color: var(--red-primary);
         }
-
-        .rank {
-            font-size: 1.2em;
-            font-weight: bold;
-            color: #667eea;
-        }
-
-        .rank-1 { color: #FFD700; }
-        .rank-2 { color: #C0C0C0; }
-        .rank-3 { color: #CD7F32; }
-
-        .tier {
-            display: inline-block;
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-size: 0.85em;
-            font-weight: 600;
-        }
-
-        .tier-legend { background: linear-gradient(135deg, #FFD700, #FFA500); color: white; }
-        .tier-diamond { background: linear-gradient(135deg, #B9F2FF, #00D4FF); color: white; }
-        .tier-gold { background: linear-gradient(135deg, #FFD700, #DAA520); color: white; }
-        .tier-silver { background: linear-gradient(135deg, #C0C0C0, #808080); color: white; }
-        .tier-bronze { background: linear-gradient(135deg, #CD7F32, #8B4513); color: white; }
-        .tier-newcomer { background: #e0e0e0; color: #666; }
 
         .badge {
-            display: inline-block;
-            margin: 2px;
-            font-size: 1.2em;
+            font-size: 1.1em;
+            margin: 0 2px;
+            filter: drop-shadow(0 0 3px var(--red-glow));
         }
 
-        .category-chart {
+        /* Charts */
+        .chart-container {
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 15px;
         }
 
-        .category-bar {
+        .chart-bar {
             display: flex;
             align-items: center;
             gap: 15px;
         }
 
-        .category-name {
-            min-width: 150px;
-            font-weight: 600;
+        .chart-label {
+            min-width: 180px;
+            font-weight: 700;
+            color: var(--cyan-hack);
+            font-size: 0.9em;
         }
 
-        .bar-container {
+        .bar-wrapper {
             flex: 1;
             height: 30px;
-            background: #f0f0f0;
-            border-radius: 15px;
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 0, 64, 0.3);
+            position: relative;
             overflow: hidden;
         }
 
         .bar-fill {
             height: 100%;
-            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(90deg, var(--red-primary), var(--warning-orange));
             display: flex;
             align-items: center;
+            justify-content: flex-end;
             padding: 0 10px;
-            color: white;
-            font-weight: 600;
-            font-size: 0.9em;
+            color: #fff;
+            font-weight: 700;
+            font-size: 0.85em;
+            box-shadow: 0 0 10px var(--red-glow);
             transition: width 1s ease;
+            position: relative;
         }
 
-        .recent-activity {
-            display: grid;
-            gap: 15px;
+        .bar-fill::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            animation: shimmer 2s infinite;
         }
 
-        .activity-item {
-            padding: 15px;
-            background: #f8f9ff;
-            border-radius: 10px;
-            border-left: 4px solid #667eea;
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
         }
 
-        .activity-title {
-            font-weight: 600;
-            margin-bottom: 5px;
-        }
-
-        .activity-meta {
-            font-size: 0.9em;
-            color: #666;
-        }
-
-        .loading {
-            text-align: center;
-            padding: 50px;
-            font-size: 1.2em;
-            color: #666;
-        }
-
-        .error {
-            background: #fee;
-            border: 2px solid #fcc;
-            color: #c33;
-            padding: 20px;
-            border-radius: 10px;
-            margin: 20px 0;
-        }
-
-        .links {
+        /* Buttons */
+        .btn-group {
             display: flex;
             gap: 15px;
             margin-top: 20px;
+            flex-wrap: wrap;
         }
 
         .btn {
             display: inline-block;
             padding: 12px 24px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
+            background: transparent;
+            color: var(--red-primary);
             text-decoration: none;
-            border-radius: 25px;
-            font-weight: 600;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            border: 2px solid var(--red-primary);
+            font-family: 'Orbitron', monospace;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: var(--red-primary);
+            transition: left 0.3s ease;
+            z-index: -1;
         }
 
         .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+            color: #000;
+            box-shadow: 0 0 20px var(--red-glow);
         }
 
+        .btn:hover::before {
+            left: 0;
+        }
+
+        /* Loading */
+        .loading {
+            text-align: center;
+            padding: 50px;
+            font-size: 1.2em;
+            color: var(--terminal-green);
+        }
+
+        .loading::after {
+            content: "...";
+            animation: dots 1.5s infinite;
+        }
+
+        @keyframes dots {
+            0%, 20% { content: "."; }
+            40% { content: ".."; }
+            60%, 100% { content: "..."; }
+        }
+
+        .error {
+            background: rgba(255, 0, 0, 0.1);
+            border: 2px solid #ff0000;
+            color: #ff6666;
+            padding: 20px;
+            margin: 20px 0;
+            font-weight: 700;
+        }
+
+        /* Footer */
         footer {
             text-align: center;
             padding: 30px;
-            color: white;
+            color: var(--terminal-green);
             margin-top: 50px;
+            border-top: 1px solid var(--red-primary);
         }
 
+        footer a {
+            color: var(--red-primary);
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            color: var(--cyan-hack);
+            text-shadow: 0 0 5px rgba(0, 255, 255, 0.5);
+        }
+
+        /* Glitch effect for title */
+        .glitch {
+            position: relative;
+        }
+
+        .glitch::before,
+        .glitch::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .glitch::before {
+            animation: glitch-1 2s infinite;
+            color: var(--cyan-hack);
+            z-index: -1;
+        }
+
+        .glitch::after {
+            animation: glitch-2 2s infinite;
+            color: var(--red-primary);
+            z-index: -2;
+        }
+
+        @keyframes glitch-1 {
+            0%, 100% { transform: translate(0); }
+            20% { transform: translate(-2px, 2px); }
+            40% { transform: translate(-2px, -2px); }
+            60% { transform: translate(2px, 2px); }
+            80% { transform: translate(2px, -2px); }
+        }
+
+        @keyframes glitch-2 {
+            0%, 100% { transform: translate(0); }
+            20% { transform: translate(2px, -2px); }
+            40% { transform: translate(2px, 2px); }
+            60% { transform: translate(-2px, -2px); }
+            80% { transform: translate(-2px, 2px); }
+        }
+
+        /* Responsive */
         @media (max-width: 768px) {
+            h1 {
+                font-size: 1.8em;
+                letter-spacing: 2px;
+            }
+
             .stats-grid {
                 grid-template-columns: 1fr;
             }
 
-            h1 {
-                font-size: 2em;
-            }
-
             .leaderboard-table {
-                font-size: 0.9em;
+                font-size: 0.75em;
             }
 
-            .links {
+            .chart-label {
+                min-width: 120px;
+                font-size: 0.8em;
+            }
+
+            .btn-group {
                 flex-direction: column;
             }
+
+            .status-bar {
+                flex-direction: column;
+                gap: 5px;
+            }
+        }
+
+        /* Typing cursor */
+        .typing::after {
+            content: "█";
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+            0%, 49% { opacity: 1; }
+            50%, 100% { opacity: 0; }
         }
     </style>
 </head>
 <body>
+    <canvas id="matrix-bg"></canvas>
+
     <div class="container">
         <header>
-            <h1>🏆 Hackteam-Red BBS</h1>
-            <p class="subtitle">International Red Team Community Bulletin Board</p>
-            <div class="links">
-                <a href="https://github.com/Hackteam-Red/bbs/discussions" class="btn">📋 Visit BBS</a>
-                <a href="https://github.com/Hackteam-Red/bbs" class="btn">⭐ GitHub Repo</a>
-                <a href="leaderboard.json" class="btn">📊 Raw Data</a>
+            <div class="terminal-header">
+                <div class="terminal-dots">
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                </div>
+            </div>
+            <h1 class="glitch" data-text="HACKTEAM-RED">HACKTEAM-RED</h1>
+            <p class="subtitle">⚡ COMMAND & CONTROL CENTER :: RED TEAM OPS</p>
+            <div class="status-bar">
+                <span class="status-item">STATUS: OPERATIONAL</span>
+                <span class="status-item">SECURITY: MAXIMUM</span>
+                <span class="status-item">UPLINK: ACTIVE</span>
+                <span class="status-item typing">READY</span>
+            </div>
+            <div class="btn-group">
+                <a href="https://github.com/Hackteam-Red/bbs/discussions" class="btn">⚡ ENTER BBS</a>
+                <a href="https://github.com/Hackteam-Red/bbs" class="btn">⚙ REPOSITORY</a>
+                <a href="leaderboard.json" class="btn">📊 RAW DATA</a>
             </div>
         </header>
 
         <div id="loading" class="loading">
-            ⏳ Loading dashboard data...
+            ⏳ INITIALIZING COMMAND CENTER
         </div>
 
         <div id="error" style="display: none;"></div>
@@ -293,36 +678,43 @@
             <!-- Stats Grid -->
             <div class="stats-grid">
                 <div class="stat-card">
-                    <h3>📊 Total Discussions</h3>
+                    <h3>⚡ TOTAL OPERATIONS</h3>
                     <div class="stat-value" id="total-discussions">-</div>
+                    <div class="stat-label">Active Discussions</div>
                 </div>
                 <div class="stat-card">
-                    <h3>👥 Active Contributors</h3>
+                    <h3>👤 OPERATORS</h3>
                     <div class="stat-value" id="total-users">-</div>
+                    <div class="stat-label">Active Contributors</div>
                 </div>
                 <div class="stat-card">
-                    <h3>🔥 This Week</h3>
+                    <h3>🔥 WEEKLY ACTIVITY</h3>
                     <div class="stat-value" id="week-activity">-</div>
+                    <div class="stat-label">Operations This Week</div>
                 </div>
                 <div class="stat-card">
-                    <h3>⏰ Last Updated</h3>
-                    <div class="stat-value" id="last-updated" style="font-size: 1.2em;">-</div>
+                    <h3>⏰ LAST SYNC</h3>
+                    <div class="stat-value" id="last-updated" style="font-size: 1em;">-</div>
+                    <div class="stat-label">System Update</div>
                 </div>
             </div>
 
             <!-- Leaderboard -->
             <div class="section">
-                <h2>🏆 Top Contributors</h2>
+                <div class="section-header">
+                    <span class="section-icon">🏆</span>
+                    <h2>TOP OPERATORS</h2>
+                </div>
                 <table class="leaderboard-table">
                     <thead>
                         <tr>
-                            <th>Rank</th>
-                            <th>User</th>
-                            <th>Tier</th>
-                            <th>Score</th>
-                            <th>Discussions</th>
-                            <th>Comments</th>
-                            <th>Badges</th>
+                            <th>RANK</th>
+                            <th>OPERATOR</th>
+                            <th>TIER</th>
+                            <th>SCORE</th>
+                            <th>OPS</th>
+                            <th>COMMS</th>
+                            <th>BADGES</th>
                         </tr>
                     </thead>
                     <tbody id="leaderboard-body">
@@ -332,47 +724,98 @@
 
             <!-- Categories -->
             <div class="section">
-                <h2>📊 Discussion Categories</h2>
-                <div class="category-chart" id="categories-chart"></div>
+                <div class="section-header">
+                    <span class="section-icon">📊</span>
+                    <h2>OPERATION CATEGORIES</h2>
+                </div>
+                <div class="chart-container" id="categories-chart"></div>
             </div>
 
             <!-- Tier Distribution -->
             <div class="section">
-                <h2>🎖️ Tier Distribution</h2>
-                <div class="category-chart" id="tier-chart"></div>
+                <div class="section-header">
+                    <span class="section-icon">🎖️</span>
+                    <h2>OPERATOR TIERS</h2>
+                </div>
+                <div class="chart-container" id="tier-chart"></div>
             </div>
         </div>
 
         <footer>
-            <p>Built with ❤️ by Hackteam-Red Community</p>
-            <p>Powered by GitHub Discussions • Updated automatically every 6 hours</p>
+            <p>[ HACKTEAM-RED :: ESTABLISHED 2024 ]</p>
+            <p>POWERED BY <a href="https://github.com">GITHUB</a> :: AUTO-SYNC EVERY 6H</p>
+            <p style="margin-top: 10px; font-size: 0.8em; color: var(--red-primary);">
+                ⚠ AUTHORIZED PERSONNEL ONLY ⚠
+            </p>
         </footer>
     </div>
 
     <script>
+        // Matrix rain effect
+        const canvas = document.getElementById('matrix-bg');
+        const ctx = canvas.getContext('2d');
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const matrix = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%^&*()_+-=[]{}|;:,.<>?/~`";
+        const fontSize = 14;
+        const columns = canvas.width / fontSize;
+        const drops = [];
+
+        for (let i = 0; i < columns; i++) {
+            drops[i] = Math.random() * -100;
+        }
+
+        function drawMatrix() {
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            ctx.fillStyle = '#00ff41';
+            ctx.font = fontSize + 'px monospace';
+
+            for (let i = 0; i < drops.length; i++) {
+                const text = matrix[Math.floor(Math.random() * matrix.length)];
+                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                    drops[i] = 0;
+                }
+                drops[i]++;
+            }
+        }
+
+        setInterval(drawMatrix, 50);
+
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+
+        // Dashboard data loading
         async function loadDashboard() {
             try {
-                // Load leaderboard data
                 const leaderboardResponse = await fetch('leaderboard.json');
                 const leaderboard = await leaderboardResponse.json();
 
-                // Load stats data
                 const statsResponse = await fetch('stats.json');
                 const stats = await statsResponse.json();
 
-                // Hide loading, show dashboard
                 document.getElementById('loading').style.display = 'none';
                 document.getElementById('dashboard').style.display = 'block';
 
-                // Populate stats
                 document.getElementById('total-discussions').textContent = stats.total || 0;
                 document.getElementById('total-users').textContent = leaderboard.total_users || 0;
                 document.getElementById('week-activity').textContent = stats.lastWeek || 0;
                 
                 const lastUpdated = new Date(leaderboard.generated_at);
-                document.getElementById('last-updated').textContent = lastUpdated.toLocaleDateString();
+                document.getElementById('last-updated').textContent = lastUpdated.toLocaleDateString('en-US', {
+                    month: 'short',
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
 
-                // Populate leaderboard
                 const leaderboardBody = document.getElementById('leaderboard-body');
                 leaderboard.top_users.slice(0, 25).forEach(user => {
                     const row = document.createElement('tr');
@@ -382,45 +825,43 @@
                     
                     row.innerHTML = `
                         <td><span class="rank ${rankClass}">#${user.rank}</span></td>
-                        <td><strong>@${user.username}</strong></td>
+                        <td><span class="username">${user.username}</span></td>
                         <td><span class="tier tier-${tierClass}">${user.tier}</span></td>
-                        <td><strong>${user.score}</strong></td>
+                        <td><span class="score">${user.score}</span></td>
                         <td>${user.stats.discussions}</td>
                         <td>${user.stats.comments}</td>
-                        <td>${user.badges.map(b => `<span class="badge">${b.split(' ')[0]}</span>`).join(' ')}</td>
+                        <td>${user.badges.map(b => `<span class="badge">${b.split(' ')[0]}</span>`).join(' ') || '-'}</td>
                     `;
                     
                     leaderboardBody.appendChild(row);
                 });
 
-                // Populate categories chart
                 const categoriesChart = document.getElementById('categories-chart');
                 const maxCategoryCount = Math.max(...Object.values(stats.categories || {}));
                 
                 Object.entries(stats.categories || {}).forEach(([name, count]) => {
                     const percentage = (count / maxCategoryCount) * 100;
                     const bar = document.createElement('div');
-                    bar.className = 'category-bar';
+                    bar.className = 'chart-bar';
                     bar.innerHTML = `
-                        <div class="category-name">${name}</div>
-                        <div class="bar-container">
+                        <div class="chart-label">▸ ${name}</div>
+                        <div class="bar-wrapper">
                             <div class="bar-fill" style="width: ${percentage}%">${count}</div>
                         </div>
                     `;
                     categoriesChart.appendChild(bar);
                 });
 
-                // Populate tier distribution
                 const tierChart = document.getElementById('tier-chart');
                 const maxTierCount = Math.max(...Object.values(leaderboard.tier_distribution || {}));
                 
                 Object.entries(leaderboard.tier_distribution || {}).forEach(([tier, count]) => {
                     const percentage = (count / maxTierCount) * 100;
                     const bar = document.createElement('div');
-                    bar.className = 'category-bar';
+                    bar.className = 'chart-bar';
                     bar.innerHTML = `
-                        <div class="category-name">${tier}</div>
-                        <div class="bar-container">
+                        <div class="chart-label">▸ ${tier}</div>
+                        <div class="bar-wrapper">
                             <div class="bar-fill" style="width: ${percentage}%">${count}</div>
                         </div>
                     `;
@@ -432,12 +873,11 @@
                 document.getElementById('loading').style.display = 'none';
                 const errorDiv = document.getElementById('error');
                 errorDiv.className = 'error';
-                errorDiv.textContent = '❌ Error loading dashboard data. Please try again later.';
+                errorDiv.textContent = '❌ SYSTEM ERROR :: FAILED TO LOAD DATA :: CHECK CONNECTION';
                 errorDiv.style.display = 'block';
             }
         }
 
-        // Load dashboard on page load
         loadDashboard();
     </script>
 </body>
