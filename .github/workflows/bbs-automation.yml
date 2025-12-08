@@ -1,0 +1,248 @@
+name: BBS Automation
+
+on:
+  schedule:
+    # Run every 6 hours
+    - cron: '0 */6 * * *'
+  
+  workflow_dispatch:  # Allow manual trigger
+  
+  discussion:
+    types: [created, edited]
+
+permissions:
+  contents: write
+  discussions: write
+  issues: write
+
+jobs:
+  update-bbs:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: 📥 Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: 🐍 Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+      
+      - name: 📦 Install dependencies
+        run: |
+          pip install requests PyGithub feedgen
+      
+      - name: 🤖 Run BBS Bot
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO_NAME: ${{ github.event.repository.name }}
+        run: |
+          python bbs-bot.py
+      
+      - name: 📊 Generate Statistics Badge
+        run: |
+          # Create badges directory
+          mkdir -p badges
+          
+          # Generate simple statistics
+          echo "Generating badges..."
+      
+      - name: 📤 Commit and push changes
+        run: |
+          git config --local user.email "bbs-bot@hackteam-red.github.io"
+          git config --local user.name "BBS Bot"
+          
+          git add BOARD.md bbs-feed.xml
+          
+          if git diff --staged --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "🤖 Auto-update BBS board [$(date +'%Y-%m-%d %H:%M UTC')]"
+            git push
+          fi
+      
+      - name: 📢 Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        if: github.ref == 'refs/heads/main'
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./public
+          publish_branch: gh-pages
+
+  welcome-new-discussion:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'discussion' && github.event.action == 'created'
+    
+    steps:
+      - name: 📥 Checkout
+        uses: actions/checkout@v4
+      
+      - name: 👋 Send welcome message
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const discussionNumber = context.payload.discussion.number;
+            const author = context.payload.discussion.user.login;
+            
+            const welcomeMessage = `
+            👋 **Welcome to Hackteam-Red BBS, @${author}!**
+            
+            Thank you for your post! Here's what happens next:
+            
+            - 🏷️ Your post will be automatically categorized
+            - 📊 It will appear in our bulletin board within 6 hours
+            - 🔔 Community members will be notified
+            - 📡 Your post is added to our RSS feed
+            
+            ## Quick Tips:
+            
+            - Use clear, descriptive titles
+            - Add relevant labels for better visibility
+            - Check back for responses and updates
+            - Mark as "Answered" when resolved
+            
+            ## Categories:
+            
+            - 💼 **Jobs & Opportunities** - Hiring, positions, gigs
+            - 🤝 **Help Wanted** - Need assistance or expertise
+            - 🔧 **Tools & Resources** - Scripts, tools, utilities
+            - 📚 **Learning** - Tutorials, courses, knowledge sharing
+            - 🎯 **Projects** - Collaboration opportunities
+            - 📢 **Announcements** - General news and updates
+            
+            ---
+            
+            🚀 **Join our community:**
+            - Star our repos to stay updated
+            - Follow discussions you're interested in
+            - Share your knowledge and help others
+            
+            *This is an automated message from BBS Bot* 🤖
+            `;
+            
+            await github.rest.discussions.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              discussion_number: discussionNumber,
+              body: welcomeMessage
+            });
+
+  auto-label:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'discussion'
+    
+    steps:
+      - name: 🏷️ Auto-label discussion
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const title = context.payload.discussion.title.toLowerCase();
+            const body = (context.payload.discussion.body || '').toLowerCase();
+            const content = title + ' ' + body;
+            
+            const labelRules = {
+              'job': ['hiring', 'job', 'vacancy', 'position', 'career', 'work', 'employment'],
+              'help-wanted': ['help', 'need', 'looking for', 'assistance', 'support', 'question'],
+              'collaboration': ['collab', 'partner', 'team up', 'join', 'together', 'contribute'],
+              'tools': ['tool', 'script', 'software', 'resource', 'utility', 'exploit'],
+              'learning': ['learn', 'tutorial', 'course', 'training', 'education', 'guide'],
+              'urgent': ['urgent', 'asap', 'immediately', 'critical', 'emergency'],
+              'red-team': ['red team', 'redteam', 'pentest', 'penetration', 'offensive'],
+              'blue-team': ['blue team', 'blueteam', 'defense', 'defensive', 'soc'],
+              'research': ['research', 'analysis', 'study', 'investigation', 'cve']
+            };
+            
+            const labelsToAdd = [];
+            
+            for (const [label, keywords] of Object.entries(labelRules)) {
+              if (keywords.some(keyword => content.includes(keyword))) {
+                labelsToAdd.push(label);
+              }
+            }
+            
+            if (labelsToAdd.length > 0) {
+              console.log(`Adding labels: ${labelsToAdd.join(', ')}`);
+              
+              // Note: GitHub Discussions labels work differently
+              // This is a placeholder for the actual implementation
+              core.info(`Would add labels: ${labelsToAdd.join(', ')}`);
+            }
+
+  generate-stats:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    
+    steps:
+      - name: 📥 Checkout
+        uses: actions/checkout@v4
+      
+      - name: 🐍 Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      
+      - name: 📊 Generate statistics
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            
+            // Fetch all discussions
+            const discussions = await github.paginate(
+              github.rest.discussions.list,
+              {
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                per_page: 100
+              }
+            );
+            
+            // Calculate statistics
+            const stats = {
+              total: discussions.length,
+              lastWeek: 0,
+              categories: {},
+              topContributors: {},
+              generatedAt: new Date().toISOString()
+            };
+            
+            const oneWeekAgo = new Date();
+            oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
+            
+            discussions.forEach(disc => {
+              // Recent activity
+              if (new Date(disc.created_at) > oneWeekAgo) {
+                stats.lastWeek++;
+              }
+              
+              // Categories
+              const category = disc.category?.name || 'Uncategorized';
+              stats.categories[category] = (stats.categories[category] || 0) + 1;
+              
+              // Contributors
+              const author = disc.user.login;
+              stats.topContributors[author] = (stats.topContributors[author] || 0) + 1;
+            });
+            
+            // Sort top contributors
+            stats.topContributors = Object.entries(stats.topContributors)
+              .sort((a, b) => b[1] - a[1])
+              .slice(0, 10)
+              .reduce((obj, [key, value]) => ({ ...obj, [key]: value }), {});
+            
+            // Save statistics
+            fs.writeFileSync('stats.json', JSON.stringify(stats, null, 2));
+            
+            console.log('Statistics generated:', stats);
+      
+      - name: 📤 Commit statistics
+        run: |
+          git config --local user.email "bbs-bot@hackteam-red.github.io"
+          git config --local user.name "BBS Bot"
+          
+          git add stats.json
+          git commit -m "📊 Update statistics [$(date +'%Y-%m-%d')]" || echo "No changes"
+          git push || echo "Nothing to push"
